@@ -6,7 +6,8 @@
 #define PHYSICSENGINE_CONSTANTS_H
 
 namespace math {
-
+    inline constexpr float gravity = 9.80665f;
+    inline constexpr float worldMultiplier = 25.0f;
 }
 
 #endif //PHYSICSENGINE_CONSTANTS_H

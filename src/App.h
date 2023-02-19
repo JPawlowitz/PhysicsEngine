@@ -11,6 +11,9 @@ public:
     ~App() = default;
 
     void run();
+
+private:
+    float m_deltaTime{};
 };
 
 #endif //PHYSICSENGINE_APP_H
