@@ -26,11 +26,14 @@ void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entit
 
                 if (body.m_position != neighbourBody.m_position) {
                     auto distance = neighbourBody.getCenter() - body.getCenter();
+                    auto distanceMagnitude = std::sqrtf(std::powf(distance.x, 2) + std::powf(distance.y, 2));
 
-                    if (std::sqrt(std::pow(distance.x, 2) + std::pow(distance.y, 2)) < body.getDiameter() * 2) {
-                        body.m_force += distance * 0.5f;
+                    if (distanceMagnitude < body.getDiameter()) {
+                        auto overlapMagnitude = body.getDiameter() - distanceMagnitude;
+
+                        body.m_force += distance * overlapMagnitude * 0.5f;
                         body.m_position += body.m_force * deltaTime;
-                        neighbourBody.m_force += -distance * 0.5f;
+                        neighbourBody.m_force += -distance * overlapMagnitude * 0.5f;
                         neighbourBody.m_position += neighbourBody.m_force * deltaTime;
                     }
                 }
