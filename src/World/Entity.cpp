@@ -5,9 +5,9 @@
 #include "Entity.h"
 
 namespace World {
-    Entity::Entity(const sf::Vector2f &position, const sf::Vector2f &initialForce, float diameter)
-    : m_body{position, initialForce, 2 * diameter} {
-        m_shape.setRadius(m_body.getDiameter());
+    Entity::Entity(const sf::Vector2f &position, const sf::Vector2f &initialForce, float radius)
+    : m_body{position, initialForce, radius} {
+        m_shape.setRadius(m_body.getRadius());
         m_shape.setPosition(m_body.m_position);
     }
 }

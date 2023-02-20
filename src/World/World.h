@@ -17,9 +17,10 @@ namespace World {
         ~World() = default;
 
         const std::vector<Entity>& getEntities() { return m_entities; }
+        const sf::Shape& getSpawnerShape() { return m_spawner.getShape(); }
 
         void update(float deltaTime);
-        int getNumEntities() { return m_entities.size(); }
+        unsigned long getNumEntities() { return m_entities.size(); }
 
     private:
         std::vector<Entity> m_entities;

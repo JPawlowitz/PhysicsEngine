@@ -16,10 +16,12 @@ public:
     sf::Vector2f m_position;
     sf::Vector2f m_force;
 
-    float getDiameter() const { return m_diameter; }
+    float getRadius() const { return m_radius; }
+    float getDiameter() const { return m_radius * 2; }
+    sf::Vector2f getCenter();
 
 private:
-    float m_diameter{};
+    float m_radius{};
 };
 
 

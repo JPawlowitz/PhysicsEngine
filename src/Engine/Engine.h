@@ -15,6 +15,8 @@ public:
     ~Engine() = default;
 
     void calculatePhysics(float deltaTime, std::vector<World::Entity> *entities);
+    sf::Vector2f getDistanceCircles(const sf::Vector2f& firsVector, const sf::Vector2f& secondVector);
+
 
 private:
     int m_width{};

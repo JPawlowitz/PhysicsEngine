@@ -6,10 +6,10 @@
 
 namespace World {
 
-    World::BodySpawner::BodySpawner(const sf::Vector2f &spawnPosition, int numObjects, float interval)
-    : m_spawnPosition{spawnPosition}, m_numObjectsToSpawn{numObjects}, m_interval{interval}
+    World::BodySpawner::BodySpawner(const sf::Vector2f &spawnPosition, int numObjects, float radius, float interval)
+    : m_spawnPosition{spawnPosition}, m_numObjectsToSpawn{numObjects}, m_diameter{radius}, m_interval{interval}
     {
-        m_shape.setSize({20.0f, 20.0f});
+        m_shape.setSize({radius * 4, radius * 2});
         m_shape.setPosition(m_spawnPosition);
         m_shape.setFillColor(sf::Color::Blue);
     }
@@ -20,7 +20,7 @@ namespace World {
         if (m_timer >= m_interval && m_numObjectsToSpawn > 0) {
             auto randomForceX = m_range(m_randomGenerator);
 
-            Entity newEntity{m_spawnPosition, {-randomForceX, 0.0f}, 10.0f};
+            Entity newEntity{m_spawnPosition, {-randomForceX, 0.0f}, m_diameter};
             entities->push_back(newEntity);
 
             m_timer = 0.0f;

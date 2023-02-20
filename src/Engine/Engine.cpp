@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "./Math/Constants.h"
+#include <cmath>
 
 Engine::Engine(int width, int height) : m_width{width}, m_height{height} {}
 
@@ -11,7 +12,30 @@ void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entit
     for (auto& entity : *entities) {
         auto& body = entity.m_body;
 
-        if (body.m_position.y < m_height - body.getDiameter() * 2) {
+        if (body.m_position.y < m_height - body.getDiameter()) {
+            if (body.m_position.x < 0.0f) {
+                body.m_force = { -body.m_force.x, body.m_force.y };
+            }
+
+            if (body.m_position.x + body.getDiameter() > m_width) {
+                body.m_force = { -body.m_force.x, body.m_force.y };
+            }
+
+            for (auto& neighbour : *entities) {
+                auto& neighbourBody = neighbour.m_body;
+
+                if (body.m_position != neighbourBody.m_position) {
+                    auto distance = neighbourBody.getCenter() - body.getCenter();
+
+                    if (std::sqrt(std::pow(distance.x, 2) + std::pow(distance.y, 2)) < body.getDiameter() * 2) {
+                        body.m_force += distance * 0.5f;
+                        body.m_position += body.m_force * deltaTime;
+                        neighbourBody.m_force += -distance * 0.5f;
+                        neighbourBody.m_position += neighbourBody.m_force * deltaTime;
+                    }
+                }
+            }
+
             body.m_force = {body.m_force.x, body.m_force.y + World::gravity * World::worldMultiplier * deltaTime};
 
             body.m_position += body.m_force * deltaTime;
@@ -20,4 +44,8 @@ void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entit
             body.m_force = {0.0f, 0.0f};
         }
     }
+}
+
+sf::Vector2f Engine::getDistanceCircles(const sf::Vector2f &firsVector, const sf::Vector2f &secondVector) {
+
 }

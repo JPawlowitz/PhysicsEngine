@@ -6,7 +6,7 @@
 
 namespace World {
     World::World(int width, int height)
-    : m_engine{width, height}, m_spawner{{width - 40.0f, 20.0f}, 50, 0.5f} {
+    : m_engine{width, height}, m_spawner{{width - 40.0f, 20.0f}, 100, 20.0f, 0.1f} {
         m_entities.reserve(50);
     }
 

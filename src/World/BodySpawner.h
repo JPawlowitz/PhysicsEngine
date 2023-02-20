@@ -13,7 +13,7 @@ namespace World {
     class BodySpawner {
     public:
         BodySpawner() = default;
-        BodySpawner(const sf::Vector2f& spawnPosition, int numObjects, float interval);
+        BodySpawner(const sf::Vector2f& spawnPosition, int numObjects, float radius, float interval);
         ~BodySpawner() = default;
 
         void run(float deltaTime, std::vector<Entity> *entities);
@@ -24,11 +24,12 @@ namespace World {
         sf::RectangleShape m_shape{};
         sf::Vector2f m_spawnPosition{};
         int m_numObjectsToSpawn{};
+        float m_diameter{};
         float m_interval{};
         float m_timer{};
 
         std::mt19937 m_randomGenerator{ std::random_device{}() };
-        std::uniform_real_distribution<float> m_range{100.0f, 1000.0f};
+        std::uniform_real_distribution<float> m_range{1000.0f, 2000.0f};
     };
 }
 
