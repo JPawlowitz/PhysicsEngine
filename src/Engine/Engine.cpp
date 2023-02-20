@@ -5,23 +5,19 @@
 #include "Engine.h"
 #include "./Math/Constants.h"
 
-Engine::Engine(float groundLevel) : m_groundLevel(groundLevel){}
+Engine::Engine(int width, int height) : m_width{width}, m_height{height} {}
 
-void Engine::addBody(const PhysicsBody &newBody) {
-    m_bodies.push_back(newBody);
-}
+void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entities) {
+    for (auto& entity : *entities) {
+        auto& body = entity.m_body;
 
-std::vector<PhysicsBody>& Engine::getBodies() {
-    return m_bodies;
-}
+        if (body.m_position.y < m_height - body.getDiameter() * 2) {
+            body.m_force = {body.m_force.x, body.m_force.y + World::gravity * World::worldMultiplier * deltaTime};
 
-void Engine::runSimulation(float deltaTime) {
-    for (auto& body : m_bodies) {
-        if (body.getShape().getPosition().y + body.getShape().getLocalBounds().height < m_groundLevel) {
-            body.setAcceleration(sf::Vector2f {body.getAcceleration().x, body.getAcceleration().y + math::gravity * deltaTime});
-            body.updatePosition(deltaTime);
+            body.m_position += body.m_force * deltaTime;
+            entity.updatePosition();
         } else {
-            body.setAcceleration(sf::Vector2f{});
+            body.m_force = {0.0f, 0.0f};
         }
     }
 }

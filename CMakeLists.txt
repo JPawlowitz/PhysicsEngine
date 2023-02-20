@@ -3,7 +3,7 @@ project(PhysicsEngine)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(PhysicsEngine src/main.cpp src/App.h src/App.cpp src/Engine/Engine.cpp src/Engine/Engine.h src/Engine/Bodies/PhysicsBody.cpp src/Engine/Bodies/PhysicsBody.h src/Engine/Math/Constants.h src/Engine/World.cpp src/Engine/World.h src/Engine/BodySpawner.cpp src/Engine/BodySpawner.h)
+add_executable(PhysicsEngine src/main.cpp src/App.h src/App.cpp src/Engine/Engine.cpp src/Engine/Engine.h src/Engine/Math/Constants.h src/World/World.cpp src/World/World.h src/World/BodySpawner.cpp src/World/BodySpawner.h src/World/Entity.cpp src/World/Entity.h src/Engine/Bodies/Body.cpp src/Engine/Bodies/Body.h)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
 find_package(SFML REQUIRED system window graphics network audio)

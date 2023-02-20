@@ -5,24 +5,20 @@
 #ifndef PHYSICSENGINE_ENGINE_H
 #define PHYSICSENGINE_ENGINE_H
 
-#include "./Bodies/PhysicsBody.h"
+#include "../World/Entity.h"
 #include <vector>
 
 class Engine {
 public:
-    explicit Engine(float groundLevel);
+    Engine() = default;
+    Engine(int width, int height);
     ~Engine() = default;
 
-    void addBody(const PhysicsBody& newBody);
-
-    std::vector<PhysicsBody>& getBodies();
-    unsigned long getNumBodies() { return m_bodies.size(); }
-
-    void runSimulation(float deltaTime);
+    void calculatePhysics(float deltaTime, std::vector<World::Entity> *entities);
 
 private:
-    std::vector<PhysicsBody> m_bodies;
-    float m_groundLevel{};
+    int m_width{};
+    int m_height{};
 };
 
 
