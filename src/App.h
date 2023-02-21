@@ -7,6 +7,7 @@
 
 #include "./World/World.h"
 #include <SFML/Graphics.hpp>
+#include <array>
 
 class App {
 public:
@@ -24,10 +25,9 @@ private:
     unsigned int m_textSize{26};
     float m_textSpacing{30.0f};
 
-    sf::Text m_frameText{};
-    sf::Text m_numObjectsText{};
+    std::array<sf::Text, 4> m_texts{};
 
-    World::World m_world{c_width, c_height};
+    World::World m_world{};
     float m_deltaTime{};
 };
 

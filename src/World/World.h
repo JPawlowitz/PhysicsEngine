@@ -13,7 +13,8 @@
 namespace World {
     class World {
     public:
-        World(int width, int height);
+        World() = default;
+        World(float width, float height);
         ~World() = default;
 
         const std::vector<Entity>& getEntities() { return m_entities; }

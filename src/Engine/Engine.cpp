@@ -6,49 +6,61 @@
 #include "./Math/Constants.h"
 #include <cmath>
 
-Engine::Engine(int width, int height) : m_width{width}, m_height{height} {}
+Engine::Engine(float width, float height) : m_width{width}, m_height{height} {}
+
+//void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entities) {
+//    for (auto& entity : *entities) {
+//        auto& body = entity.m_body;
+//
+//        body.m_acceleration = { 0.0f, body.getMass() * World::gravity };
+//
+//        for (auto& neighbour : *entities) {
+//            auto& neighbourBody = neighbour.m_body;
+//
+//            if (body.m_position != neighbourBody.m_position) {
+//                auto distance = body.m_position - neighbourBody.m_position;
+//                auto distanceMagnitude = std::sqrtf(std::powf(distance.x, 2) + std::powf(distance.y, 2));
+//
+//                if (distanceMagnitude < body.getDiameter()) {
+//                    auto overlapMagnitude = body.getDiameter() - distanceMagnitude;
+//
+//                    body.m_velocity += distance * overlapMagnitude * World::collisionAbsorption * 0.1f;
+//                }
+//            }
+//        }
+//
+//        checkBounds(body);
+//
+//        body.m_velocity += body.m_acceleration * deltaTime;
+//
+//        body.m_position += body.m_velocity * deltaTime;
+//
+//        entity.updatePosition();
+//    }
+//}
 
 void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entities) {
     for (auto& entity : *entities) {
-        auto& body = entity.m_body;
 
-        if (body.m_position.y < m_height - body.getDiameter()) {
-            if (body.m_position.x < 0.0f) {
-                body.m_force = { -body.m_force.x, body.m_force.y };
-            }
-
-            if (body.m_position.x + body.getDiameter() > m_width) {
-                body.m_force = { -body.m_force.x, body.m_force.y };
-            }
-
-            for (auto& neighbour : *entities) {
-                auto& neighbourBody = neighbour.m_body;
-
-                if (body.m_position != neighbourBody.m_position) {
-                    auto distance = neighbourBody.getCenter() - body.getCenter();
-                    auto distanceMagnitude = std::sqrtf(std::powf(distance.x, 2) + std::powf(distance.y, 2));
-
-                    if (distanceMagnitude < body.getDiameter()) {
-                        auto overlapMagnitude = body.getDiameter() - distanceMagnitude;
-
-                        body.m_force += distance * overlapMagnitude * 0.5f;
-                        body.m_position += body.m_force * deltaTime;
-                        neighbourBody.m_force += -distance * overlapMagnitude * 0.5f;
-                        neighbourBody.m_position += neighbourBody.m_force * deltaTime;
-                    }
-                }
-            }
-
-            body.m_force = {body.m_force.x, body.m_force.y + World::gravity * World::worldMultiplier * deltaTime};
-
-            body.m_position += body.m_force * deltaTime;
-            entity.updatePosition();
-        } else {
-            body.m_force = {0.0f, 0.0f};
-        }
     }
 }
 
-sf::Vector2f Engine::getDistanceCircles(const sf::Vector2f &firsVector, const sf::Vector2f &secondVector) {
+void Engine::checkBounds(Body& body) const {
+    //Left and right bounds
+    if (body.m_position.x - body.getRadius() < 0.0f || body.m_position.x + body.getRadius() > m_width) {
+        body.m_velocity = {-body.m_velocity.x * World::collisionAbsorption, body.m_velocity.y };
+    }
+
+    //Floor
+    if (body.m_position.y + body.getRadius() >= m_height) {
+        auto sign = body.m_velocity.x >= 0.0f ? -1.0f : 1.0f;
+        body.m_acceleration.x += (body.getMass() * World::gravity * World::groundFriction) * sign;
+        body.m_acceleration.y = 0.0f;
+
+        body.m_velocity = {body.m_velocity.x, -body.m_velocity.y * World::collisionAbsorption};
+    }
+}
+
+void Engine::checkCollision() {
 
 }

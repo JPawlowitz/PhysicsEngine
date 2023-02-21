@@ -11,16 +11,16 @@
 class Engine {
 public:
     Engine() = default;
-    Engine(int width, int height);
+    Engine(float width, float height);
     ~Engine() = default;
 
     void calculatePhysics(float deltaTime, std::vector<World::Entity> *entities);
-    sf::Vector2f getDistanceCircles(const sf::Vector2f& firsVector, const sf::Vector2f& secondVector);
-
+    void checkBounds(Body& body) const;
+    void checkCollision();
 
 private:
-    int m_width{};
-    int m_height{};
+    float m_width{};
+    float m_height{};
 };
 
 

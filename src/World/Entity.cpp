@@ -10,5 +10,9 @@ namespace World {
         m_shape.setRadius(m_body.getRadius());
         m_shape.setPosition(m_body.m_position);
     }
+
+    void Entity::updatePosition() {
+        m_shape.setPosition({m_body.m_position.x - m_body.getRadius(), m_body.m_position.y - m_body.getRadius()});
+    }
 }
 

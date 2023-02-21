@@ -10,7 +10,7 @@ namespace World {
     : m_spawnPosition{spawnPosition}, m_numObjectsToSpawn{numObjects}, m_diameter{radius}, m_interval{interval}
     {
         m_shape.setSize({radius * 4, radius * 2});
-        m_shape.setPosition(m_spawnPosition);
+        m_shape.setPosition({m_spawnPosition.x, m_spawnPosition.y - radius});
         m_shape.setFillColor(sf::Color::Blue);
     }
 

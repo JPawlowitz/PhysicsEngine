@@ -18,7 +18,7 @@ namespace World {
 
         const sf::CircleShape& getShape() { return m_shape; }
 
-        void updatePosition() { m_shape.setPosition(m_body.m_position); }
+        void updatePosition();
 
     private:
         sf::CircleShape m_shape{};
