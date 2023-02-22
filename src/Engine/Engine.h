@@ -6,24 +6,34 @@
 #define PHYSICSENGINE_ENGINE_H
 
 #include "../World/Entity.h"
+#include "../World/Chunk.h"
 #include "./Math/Vector2.h"
 #include <vector>
+#include <array>
 
-class Engine {
-public:
-    Engine() = default;
-    Engine(float width, float height);
-    ~Engine() = default;
+namespace Engine {
+    class Engine {
+    public:
+        Engine() = default;
+        Engine(float width, float height, std::vector<World::Entity>* entities);
+        ~Engine() = default;
 
-    void calculatePhysics(float deltaTime, std::vector<World::Entity> *entities);
-    void checkBounds(Body& body) const;
-    void checkCollisions(Body& body, std::vector<World::Entity> *entities);
-    void applyAcceleration(Body& body, float subDeltaTime);
+        void calculatePhysics(float deltaTime);
+        void checkBounds(Body& body) const;
+        void checkCollisions(Body& body, float deltaTime);
+        void applyAcceleration(Body& body, float subDeltaTime);
+        void updateGrid();
 
-private:
-    float m_width{};
-    float m_height{};
-};
+    private:
+        float m_width{};
+        float m_height{};
 
+        static const int c_numCells{20};
+        static const int c_substeps = 4;
+
+        std::array<std::array<std::vector<int>, c_numCells>, c_numCells> m_grid{};
+        std::vector<World::Entity>* m_entities;
+    };
+}
 
 #endif //PHYSICSENGINE_ENGINE_H

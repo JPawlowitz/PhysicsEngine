@@ -11,7 +11,7 @@
 class Body {
 public:
     Body() = default;
-    Body(const sf::Vector2f& position, const sf::Vector2f& initialForce, float radius);
+    Body(const sf::Vector2f& position, const sf::Vector2f& initialForce, float radius, int index);
     ~Body() = default;
 
     sf::Vector2f m_previousPosition{};
@@ -22,10 +22,12 @@ public:
     float getRadius() const { return m_radius; }
     float getDiameter() const { return m_radius * 2; }
     float getMass() const { return m_mass; }
+    int getIndex() const { return c_index; }
 
 private:
     float m_radius{};
-    float m_mass{150.0f};
+    float m_mass{};
+    const int c_index{};
 };
 
 
