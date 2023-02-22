@@ -4,9 +4,8 @@
 
 #include "Body.h"
 
-Body::Body(sf::Vector2f position, sf::Vector2f initialForce, float radius)
-: m_position{position}, m_velocity{initialForce}, m_radius{radius} {}
-
-sf::Vector2f Body::getCenter() {
-    return {m_position.x + m_radius, m_position.y + m_radius};
-}
+Body::Body(const sf::Vector2f& position, const sf::Vector2f& initialForce, float radius)
+: m_currentPosition{position}
+, m_previousPosition{sf::Vector2f {position.x + 0.5f, position.y}}
+, m_acceleration{initialForce}
+, m_radius{radius} {}

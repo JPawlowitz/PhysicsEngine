@@ -37,8 +37,8 @@ void App::run() {
         for (auto entity : m_world.getEntities()) {
             m_window.draw(entity.getShape());
 
-            m_texts[2].setString("VelocityX: " + std::to_string(entity.m_body.m_velocity.x));
-            m_texts[3].setString("VelocityY: " + std::to_string(entity.m_body.m_velocity.y));
+//            m_texts[2].setString("VelocityX: " + std::to_string(entity.m_body.m_velocity.x));
+//            m_texts[3].setString("VelocityY: " + std::to_string(entity.m_body.m_velocity.y));
 
 //            sf::RectangleShape velocityX{{entity.m_body.m_velocity.x * 0.2f, 5.0f}};
 //            sf::RectangleShape velocityY{{5.0f, entity.m_body.m_velocity.y * 0.2f}};
@@ -61,8 +61,9 @@ void App::run() {
 //            m_window.draw(accY);
         }
 
-        m_texts[0].setString("Frame Time: " + std::to_string(m_deltaTime * 1000) + " ms");
-        m_texts[1].setString("Objects: " + std::to_string(m_world.getNumEntities()));
+        m_texts[0].setString("FPS: " + std::to_string(static_cast<int>(1 / m_deltaTime)));
+        m_texts[1].setString("Frame Time: " + std::to_string(m_deltaTime * 1000) + " ms");
+        m_texts[2].setString("Objects: " + std::to_string(m_world.getNumEntities()));
 
         for (auto& text : m_texts) {
             m_window.draw(text);

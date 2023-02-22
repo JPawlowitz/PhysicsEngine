@@ -25,7 +25,7 @@ private:
     unsigned int m_textSize{26};
     float m_textSpacing{30.0f};
 
-    std::array<sf::Text, 4> m_texts{};
+    std::array<sf::Text, 3> m_texts{};
 
     World::World m_world{};
     float m_deltaTime{};

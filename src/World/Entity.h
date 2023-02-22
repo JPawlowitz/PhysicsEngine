@@ -6,6 +6,7 @@
 #define PHYSICSENGINE_ENTITY_H
 
 #include "../Engine/Bodies/Body.h"
+#include "../Engine/Math/Vector2.h"
 #include <SFML/Graphics.hpp>
 
 namespace World {
@@ -18,6 +19,7 @@ namespace World {
 
         const sf::CircleShape& getShape() { return m_shape; }
 
+        void applyColor(const sf::Color& color) { m_shape.setFillColor(color); }
         void updatePosition();
 
     private:

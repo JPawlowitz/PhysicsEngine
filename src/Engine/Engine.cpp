@@ -40,27 +40,60 @@ Engine::Engine(float width, float height) : m_width{width}, m_height{height} {}
 //}
 
 void Engine::calculatePhysics(float deltaTime, std::vector<World::Entity> *entities) {
-    for (auto& entity : *entities) {
+    const int substeps = 4;
+    const float subDeltaTime = deltaTime / substeps;
 
+    for (int i = 0; i < substeps; ++i) {
+        for (auto& entity : *entities) {
+            auto& body = entity.m_body;
+
+            checkBounds(body);
+            checkCollisions(body, entities);
+            applyAcceleration(body, subDeltaTime);
+
+            entity.updatePosition();
+        }
+    }
+
+}
+
+void Engine::checkBounds(Body &body) const {
+    if (body.m_currentPosition.x - body.getRadius() < 0.0f) {
+        body.m_currentPosition.x = body.getRadius();
+    }
+
+    if (body.m_currentPosition.x + body.getRadius() > m_width) {
+        body.m_currentPosition.x = m_width - body.getRadius();
+    }
+
+    if (body.m_currentPosition.y + body.getRadius() > m_height) {
+        body.m_currentPosition.y = m_height - body.getRadius();
     }
 }
 
-void Engine::checkBounds(Body& body) const {
-    //Left and right bounds
-    if (body.m_position.x - body.getRadius() < 0.0f || body.m_position.x + body.getRadius() > m_width) {
-        body.m_velocity = {-body.m_velocity.x * World::collisionAbsorption, body.m_velocity.y };
-    }
+void Engine::checkCollisions(Body &body, std::vector<World::Entity> *entities) {
+    for (auto& neighbour : *entities) {
+        auto& neighbourBody = neighbour.m_body;
 
-    //Floor
-    if (body.m_position.y + body.getRadius() >= m_height) {
-        auto sign = body.m_velocity.x >= 0.0f ? -1.0f : 1.0f;
-        body.m_acceleration.x += (body.getMass() * World::gravity * World::groundFriction) * sign;
-        body.m_acceleration.y = 0.0f;
+        auto distance = body.m_currentPosition - neighbourBody.m_currentPosition;
+        auto distanceMagnitude = std::sqrtf((distance.x * distance.x) + (distance.y * distance.y));
+        auto diameter = body.getRadius() + neighbourBody.getRadius();
 
-        body.m_velocity = {body.m_velocity.x, -body.m_velocity.y * World::collisionAbsorption};
+        if (distanceMagnitude < diameter) {
+            auto overlapMagnitude = diameter - distanceMagnitude;
+
+            body.m_currentPosition += distance * overlapMagnitude * 0.0001f;
+            neighbourBody.m_currentPosition += -distance * overlapMagnitude * 0.0001f;
+        }
     }
 }
 
-void Engine::checkCollision() {
+void Engine::applyAcceleration(Body &body, float subDeltaTime) {
+    body.m_acceleration += {0.0f, body.getMass() * World::gravity};
+    body.m_velocity = body.m_currentPosition - body.m_previousPosition;
 
+    body.m_previousPosition = body.m_currentPosition;
+    body.m_currentPosition += body.m_velocity + body.m_acceleration * subDeltaTime * subDeltaTime;
+
+    body.m_acceleration = {};
 }

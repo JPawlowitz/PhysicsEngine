@@ -6,6 +6,7 @@
 #define PHYSICSENGINE_ENGINE_H
 
 #include "../World/Entity.h"
+#include "./Math/Vector2.h"
 #include <vector>
 
 class Engine {
@@ -16,7 +17,8 @@ public:
 
     void calculatePhysics(float deltaTime, std::vector<World::Entity> *entities);
     void checkBounds(Body& body) const;
-    void checkCollision();
+    void checkCollisions(Body& body, std::vector<World::Entity> *entities);
+    void applyAcceleration(Body& body, float subDeltaTime);
 
 private:
     float m_width{};
