@@ -12,7 +12,7 @@
 namespace World {
     class Entity {
     public:
-        Entity(const sf::Vector2f& position, const sf::Vector2f& initialForce, float diameter, int index);
+        Entity(const sf::Vector2f& position, const sf::Vector2f& initialForce, float diameter, int index, float deltaTime);
         ~Entity() = default;
 
         Body m_body{};

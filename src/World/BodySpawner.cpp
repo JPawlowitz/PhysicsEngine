@@ -20,7 +20,7 @@ namespace World {
             auto randomForceX = m_accelerationRange(m_randomGenerator);
             auto randomRadius = m_radiusRange(m_randomGenerator);
 
-            Entity newEntity{m_spawnPosition, {randomForceX, 0.0f}, randomRadius, m_objectCounter};
+            Entity newEntity{m_spawnPosition, {randomForceX, 0.0f}, randomRadius, m_objectCounter, deltaTime};
             newEntity.applyColor(getRandomColor());
             entities->push_back(newEntity);
 

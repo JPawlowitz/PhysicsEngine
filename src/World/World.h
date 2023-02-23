@@ -6,7 +6,7 @@
 #define PHYSICSENGINE_WORLD_H
 
 #include "Entity.h"
-#include "Chunk.h"
+#include "../Engine/Chunk.h"
 #include "../Engine/Engine.h"
 #include "BodySpawner.h"
 #include <vector>

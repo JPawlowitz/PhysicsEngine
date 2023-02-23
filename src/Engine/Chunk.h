@@ -5,7 +5,7 @@
 #ifndef PHYSICSENGINE_CHUNK_H
 #define PHYSICSENGINE_CHUNK_H
 
-#include "../Engine/Bodies/Body.h"
+#include "Bodies/Body.h"
 #include <vector>
 
 namespace World {

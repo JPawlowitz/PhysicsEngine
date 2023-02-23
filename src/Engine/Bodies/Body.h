@@ -11,7 +11,7 @@
 class Body {
 public:
     Body() = default;
-    Body(const sf::Vector2f& position, const sf::Vector2f& initialForce, float radius, int index);
+    Body(const sf::Vector2f& position, const sf::Vector2f& initialForce, float radius, int index, float deltaTime);
     ~Body() = default;
 
     sf::Vector2f m_previousPosition{};

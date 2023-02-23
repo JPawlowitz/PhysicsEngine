@@ -8,12 +8,6 @@
 
 namespace Engine  {
     Engine::Engine(float width, float height, std::vector<World::Entity>* entities) : m_width{width}, m_height{height} {
-        for (int y = 0; y < c_numCells; ++y) {
-            for (int x = 0; x < c_numCells; ++x) {
-                m_grid[y][x] = std::vector<int>{};
-            }
-        }
-
         m_entities = entities;
     }
 
@@ -21,6 +15,8 @@ namespace Engine  {
         const float subDeltaTime = deltaTime / c_substeps;
 
         for (int i = 0; i < c_substeps; ++i) {
+            m_grid.updateGrid();
+
             for (auto& entity : *m_entities) {
                 auto& body = entity.m_body;
 
@@ -28,10 +24,27 @@ namespace Engine  {
                 checkCollisions(body, subDeltaTime);
                 applyAcceleration(body, subDeltaTime);
             }
+
+//            for (int y = 1; y < c_numCells - 1; ++y) {
+//                for (int x = 1; x < c_numCells - 1; ++x) {
+//                    for (int yNeighbour = -1; yNeighbour <= 1; ++yNeighbour) {
+//                        for (int xNeighbour = -1; xNeighbour <=1; ++xNeighbour) {
+//                            for (auto firstBody : m_grid[y][x]->bodies) {
+//                                for (auto secondBody : m_grid[yNeighbour][xNeighbour]->bodies) {
+//                                    if (firstBody->getIndex() != secondBody->getIndex()) {
+//                                        checkCollision(*firstBody, *secondBody, subDeltaTime);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
 
+
+
         for (auto& entity : *m_entities) {
-            updateGrid();
             entity.updatePosition();
         }
     }
@@ -47,6 +60,19 @@ namespace Engine  {
 
         if (body.m_currentPosition.y + body.getRadius() > m_height) {
             body.m_currentPosition.y = m_height - body.getRadius();
+        }
+    }
+
+    void Engine::checkCollision(Body &firstBody, Body &secondBody, float deltaTime) {
+        auto distance = firstBody.m_currentPosition - secondBody.m_currentPosition;
+        auto distanceMagnitude = std::sqrtf((distance.x * distance.x) + (distance.y * distance.y));
+        auto diameter = firstBody.getRadius() + secondBody.getRadius();
+
+        if (distanceMagnitude < diameter) {
+            auto overlapMagnitude = (diameter - distanceMagnitude) * 0.5f;
+
+            firstBody.m_currentPosition += distance * overlapMagnitude * deltaTime;
+            secondBody.m_currentPosition += -distance * overlapMagnitude * deltaTime;
         }
     }
 
@@ -100,25 +126,5 @@ namespace Engine  {
         body.m_currentPosition += body.m_velocity + body.m_acceleration * subDeltaTime * subDeltaTime;
 
         body.m_acceleration = {};
-    }
-
-    void Engine::updateGrid() {
-        for (int y = 0; y < c_numCells; ++y) {
-            for (int x = 0; x < c_numCells; ++x) {
-                //m_grid[y][x].clear();
-            }
-        }
-
-        const auto cellWidth = m_width / c_numCells;
-        const auto cellHeight = m_height / c_numCells;
-
-        for (auto& entity : *m_entities) {
-            if (entity.m_body.m_currentPosition.y > 0.0f) {
-                const auto x = static_cast<int>(entity.m_body.m_currentPosition.x / cellWidth);
-                const auto y = static_cast<int>(entity.m_body.m_currentPosition.y / cellHeight);
-
-                m_grid[y][x].push_back(entity.m_body.getIndex());
-            }
-        }
     }
 }
