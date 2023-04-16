@@ -19,37 +19,37 @@ namespace math {
 
     //Utility Functions
     template <typename T>
-    static constexpr T radToDeg(T angleRad) {
+    static constexpr T RadToDeg(T angleRad) {
         return (angleRad * 180.0) / PI;
     }
 
     template <typename T>
-    static constexpr auto degToRad(T angleDeg) {
+    static constexpr auto DegToRad(T angleDeg) {
         return angleDeg * (180.0 / PI);
     }
 
     template <typename T>
-    static constexpr T clamp(T min, T max, T value) {
+    static constexpr T Clamp(T min, T max, T value) {
         if (value < min) { return min; }
         if (value > max) { return max; }
         return value;
     }
 
     template <typename T, typename U>
-    static constexpr auto lerp(T a, T b, U t) {
+    static constexpr auto Lerp(T a, T b, U t) {
         return ((1 - t) * a) + (t * b);
     }
 
     template <typename T>
-    static constexpr auto invLerp(T a, T b, T value) {
+    static constexpr auto InvLerp(T a, T b, T value) {
         const auto t = (value - a) / (b - a);
-        return clamp(0.0f, 1.0f, t);
+        return Clamp(0.0f, 1.0f, t);
     }
 
     template <typename T>
-    static constexpr T remap(T iMin, T iMax, T oMin, T oMax, T value) {
-        const auto t = invLerp(iMin, iMax, value);
-        return lerp(oMin, oMax, t);
+    static constexpr T Remap(T iMin, T iMax, T oMin, T oMax, T value) {
+        const auto t = InvLerp(iMin, iMax, value);
+        return Lerp(oMin, oMax, t);
     }
 
     //Two-Dimensional float Vector
@@ -59,26 +59,31 @@ namespace math {
 
         float x, y;
 
-        float getMagnitude() const {
+        void Set(float X, float Y) {
+            x = X;
+            y = Y;
+        }
+
+        float GetMagnitude() const {
             return std::hypot(x, y);
         }
 
-        void normalize() {
-            *this /= getMagnitude();
+        void Normalize() {
+            *this /= GetMagnitude();
         }
 
-        void setMagnitude(float m) {
-            this->normalize();
+        void SetMagnitude(float m) {
+            this->Normalize();
             *this *= m;
         }
 
-        void clampMagnitude(float max) {
-            if (this->getMagnitude() > max) {
-                this->setMagnitude(max);
+        void ClampMagnitude(float max) {
+            if (this->GetMagnitude() > max) {
+                this->SetMagnitude(max);
             }
         }
 
-        float getDotProduct(const Vec2& v) const {
+        float GetDotProduct(const Vec2& v) const {
             return (x * v.x) + (y * v.y);
         }
 
@@ -86,17 +91,17 @@ namespace math {
 //
 //        }
 
-        float getDistanceBetween(const Vec2& v) const {
+        float GetDistanceBetween(const Vec2& v) const {
             Vec2 normal = v - *this;
-            return normal.getMagnitude();
+            return normal.GetMagnitude();
         }
 
-        float getAngleBetween(const Vec2& v) const {
-            const auto phi = (getDotProduct(v) / (getMagnitude() * v.getMagnitude()));
+        float GetAngleBetween(const Vec2& v) const {
+            const auto phi = (GetDotProduct(v) / (GetMagnitude() * v.GetMagnitude()));
             return std::acos(phi);
         }
 
-        float getAngle() const {
+        float GetAngle() const {
             if (x >= 0.0f) {
                 if (y >= 0.0f) { return std::atan(y / x); }
                 return -std::atan(std::abs(y / x));
@@ -106,17 +111,13 @@ namespace math {
             }
         }
 
-        Vec2 lerpBetween(const Vec2& v, float t) const {
+        Vec2 LerpBetween(const Vec2& v, float t) const {
             const auto X = ((1.0f - t) * x) + (t * v.x);
             const auto Y = ((1.0f - t) * y) + (t * v.y);
             return Vec2{X, Y};
         }
 
-        void rotateEuler(float angle) {
-
-        }
-
-        std::string toString() const {
+        std::string ToString() const {
             return std::string{"(" + std::to_string(x) + " : " + std::to_string(y) + ")"};
         }
 

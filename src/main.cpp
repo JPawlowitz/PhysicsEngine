@@ -3,9 +3,9 @@
 #include <iostream>
 
 int main() {
-    App app{1920, 1080, Solver::SolverType::Verlet};
+    App app{1920, 1080};
 
-    app.start();
+    app.Start();
 
     return 0;
 }
