@@ -1,9 +1,11 @@
 #include "App.h"
+#include "./libs/Math.h"
+#include <iostream>
 
 int main() {
-    App app{};
+    App app{1920, 1080, Solver::SolverType::Verlet};
 
-    app.run();
+    app.start();
 
     return 0;
 }

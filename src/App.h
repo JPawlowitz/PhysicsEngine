@@ -5,30 +5,33 @@
 #ifndef PHYSICSENGINE_APP_H
 #define PHYSICSENGINE_APP_H
 
-#include "./World/World.h"
+#include "./gui/Window.h"
+#include "./engine/PhysicsEngine.h"
+#include "./engine/Spawner.h"
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <memory>
 
 class App {
 public:
-    App();
+    App(int width, int height, const Solver::SolverType& solverType);
     ~App() = default;
 
+    const int c_width{};
+    const int c_height{};
+
+    void start();
     void run();
+    float getElapsedTime() const { return appClock.getElapsedTime().asSeconds(); }
 
 private:
-    const int c_width{1920};
-    const int c_height{1080};
+    std::unique_ptr<PhysicsEngine> m_engine;
+    std::unique_ptr<Window> m_window;
+    std::unique_ptr<Spawner> m_spawner;
 
-    sf::RenderWindow m_window{};
-    sf::Font m_font{};
-    unsigned int m_textSize{26};
-    float m_textSpacing{30.0f};
+    sf::Clock appClock{};
 
-    std::array<sf::Text, 3> m_texts{};
-
-    World::World m_world{};
-    float m_deltaTime{};
+    float m_dt{};
 };
 
 #endif //PHYSICSENGINE_APP_H
